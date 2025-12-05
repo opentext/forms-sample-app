@@ -7,12 +7,13 @@ import AppContext from '../store/context/app-context';
 function ResetToCheckpointModal({
   checkpoints, show, refreshCheckpoints, setCanResetToCheckpoint, setShow,
 }) {
-  const { formClient } = useContext(AppContext);
+  const { formClient, setIsFormDesignChanged } = useContext(AppContext);
   const [selectedCheckpoint, setSelectedCheckpoint] = useState();
 
   const handleClose = () => setShow(false);
 
   const handleResetToCheckpoint = () => {
+    setIsFormDesignChanged(true);
     formClient.resetForm({
       htmlElementId: FORM_DESIGNER_ELEMENT_ID,
       timestamp: selectedCheckpoint,

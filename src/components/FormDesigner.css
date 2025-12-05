@@ -2,3 +2,32 @@
   border-bottom: var(--border-style);
   height: calc(100vh - 190px);
 }
+
+@font-face {
+  font-family: OpenTextSans;
+  src: url(./webfonts/OpenTextSans_W_Lt.woff2) format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: OpenTextSans;
+  src: url(./webfonts/OpenTextSans_W_Rg.woff2) format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: OpenTextSans;
+  src: url(./webfonts/OpenTextSans_W_Bd.woff2) format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url(./webfonts/InterVariable.woff2) format("woff2");
+}

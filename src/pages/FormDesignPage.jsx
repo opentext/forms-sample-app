@@ -10,11 +10,13 @@ import {
 import AppContext from '../store/context/app-context';
 import { notificationTypes } from '../components/Notification';
 import Toolbar from '../components/Toolbar';
+import ThemeSelect from '../components/ThemeSelect';
 import FormStatusDisplay from '../components/FormStatusDisplay';
 import CheckpointControl from '../components/CheckpointControl';
 import FormDesigner, { FORM_DESIGNER_ELEMENT_ID } from '../components/FormDesigner';
-import Preview from '../components/Preview';
+import Preview, { PREVIEW_ELEMENT_ID } from '../components/Preview';
 import DesignConfig from '../components/DesignConfig';
+import LocaleSelect from '../components/LocaleSelect';
 
 const tabs = {
   designer: 'designer',
@@ -27,11 +29,15 @@ function FormDesignPage() {
     activeForm,
     formClient,
     isSpinnerVisible,
+    refreshCheckpointList,
     hideSpinner,
     isUnsaved,
     setIsUnsaved,
     showNotification,
     showSpinner,
+    setIsFormDesignChanged,
+    setChangesFlagForActiveForm,
+    setRefreshCheckpointList,
   } = useContext(AppContext);
   const navigate = useNavigate();
   const [formStatus, setFormStatus] = useState('');
@@ -45,6 +51,7 @@ function FormDesignPage() {
     showSpinner('Saving form...');
     /* If auto-save is turned of, create a checkpoint that matches the moment of saving
     (to support resetting to that moment) */
+    setIsFormDesignChanged(false);
     if (!isAutoSave) {
       await formClient.setForm({ htmlElementId: FORM_DESIGNER_ELEMENT_ID });
     }
@@ -54,6 +61,7 @@ function FormDesignPage() {
         if (!isAutoSave) {
           checkpointControlRef.current.refreshCheckpoints();
         }
+        setChangesFlagForActiveForm();
         setCanSave(false);
         setCanPublish(true);
         hideSpinner();
@@ -70,10 +78,28 @@ function FormDesignPage() {
       });
   };
 
+  const handleOnClickReload = () => {
+    showSpinner('Reloading form...');
+    formClient.getForm({ localReference: activeForm }).then(({ data }) => {
+      formClient.loadForm({ namespace: data?.namespace, name: data?.name })
+        .then(async (loadedForm) => {
+          setIsUnsaved(loadedForm, false);
+          setCanSave(false);
+          setRefreshCheckpointList(refreshCheckpointList + 1);
+          hideSpinner();
+        })
+        .catch((err) => {
+          hideSpinner();
+          showNotification(err.message, notificationTypes.error);
+        });
+    });
+  };
+
   const handleOnClickPublish = () => {
     showSpinner('Publishing form...');
     formClient.publishForm({ localReference: activeForm })
       .then(async (publishedForm) => {
+        setChangesFlagForActiveForm();
         setFormStatus(publishedForm.version.status);
         setCanPublish(false);
         hideSpinner();
@@ -114,12 +140,20 @@ function FormDesignPage() {
             if (!isAutoSave) {
               checkpointControlRef.current.enableSetCheckPointButton();
               checkpointControlRef.current.enableResetToCheckpointButton();
+            } else {
+              setChangesFlagForActiveForm();
+              setIsFormDesignChanged(true);
             }
           },
         },
       },
     );
-  }, [activeForm, formClient, isAutoSave, isUnsaved]);
+  }, [activeForm,
+    formClient,
+    isAutoSave,
+    isUnsaved,
+    setChangesFlagForActiveForm,
+    setIsFormDesignChanged]);
 
   return (
     <div hidden={isSpinnerVisible}>
@@ -136,6 +170,11 @@ function FormDesignPage() {
             onClick: handleOnClickSave,
           },
           {
+            disabled: !canSave,
+            label: 'RELOAD',
+            onClick: handleOnClickReload,
+          },
+          {
             disabled: !canPublish,
             label: 'PUBLISH',
             onClick: handleOnClickPublish,
@@ -148,6 +187,13 @@ function FormDesignPage() {
         ]}
       >
         {!isAutoSave && <CheckpointControl ref={checkpointControlRef} />}
+        <ThemeSelect
+          designerElementId={FORM_DESIGNER_ELEMENT_ID}
+          runtimeElementId={activeTab === PREVIEW_ELEMENT_ID ? PREVIEW_ELEMENT_ID : ''}
+        />
+        <LocaleSelect
+          designerElementId={FORM_DESIGNER_ELEMENT_ID}
+        />
         <FormStatusDisplay formStatus={formStatus} />
       </Toolbar>
       <Container fluid>

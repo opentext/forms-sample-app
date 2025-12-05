@@ -2,18 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import AppContext from '../store/context/app-context';
 
-const actions = [
-  { key: 'hide', value: 'hide' },
-  { key: 'show', value: 'show' },
-  { key: 'enable', value: 'enable' },
-  { key: 'disable', value: 'disable' },
-  { key: 'sendError', value: 'validate' },
-  { key: 'clearErrors', value: 'clearErrors' },
-];
-
 function FormActionDispatcher() {
   const { activeForm, formClient } = useContext(AppContext);
   const [fields, setFields] = useState([]);
+  const [actions, setActions] = useState({});
   const [selectedField, setSelectedField] = useState();
   const [selectedAction, setSelectedAction] = useState();
   const [errorMessage, setErrorMessage] = useState('');
@@ -44,33 +36,29 @@ function FormActionDispatcher() {
   };
 
   useEffect(() => {
-    formClient.getForm({ localReference: activeForm })
-      .then(({ data }) => {
-        setFields([
-          ...new Set(
-            data.content?.design.controls.reduce((accumulator, control) => {
-              const field = control.data.runtime.propertyPath;
-              if (field) {
-                accumulator.push(field);
-              }
-              return accumulator;
-            }, []),
-          ),
-        ]);
-      });
+    formClient.getIncludedFields({ localReference: activeForm })
+      .then(({ includedFields }) => setFields(includedFields));
   }, [activeForm, formClient]);
+
+  useEffect(() => {
+    setActions(formClient.getSupportedFormActions());
+  }, [formClient]);
 
   return (
     <Form>
       <InputGroup>
-        <InputGroup.Text>Form action</InputGroup.Text>
+        <InputGroup.Text>Form Action</InputGroup.Text>
         <Form.Select
           onChange={handlePropertyPathSelection}
           value={selectedField}
         >
-          <option value="">Select Field</option>
+          <option value="">Select field</option>
           {
-            fields.map((field) => <option key={field} value={field}>{field}</option>)
+            fields.map((field) => (
+              <option key={field.propertyName} value={field.propertyName}>
+                {field.propertyValue.title ?? field.propertyName}
+              </option>
+            ))
           }
         </Form.Select>
         <Form.Select
@@ -80,9 +68,9 @@ function FormActionDispatcher() {
         >
           <option value="">Select action</option>
           {
-            actions.map((action) => (
-              <option value={action.value} key={action.key}>
-                {action.key}
+            Object.entries(actions).map((action) => (
+              <option key={action[0]} value={action[0]}>
+                {action[1].label.en ?? action[0]}
               </option>
             ))
           }

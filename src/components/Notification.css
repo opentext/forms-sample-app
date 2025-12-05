@@ -1,7 +1,7 @@
 .notification {
   position: relative;
   margin-left: 35%;
-  z-index: 1;
+  z-index: 9999;
 }
 
 .notification .toast {
@@ -11,4 +11,5 @@
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 9999;
 }

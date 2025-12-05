@@ -12,37 +12,9 @@ export const getDesignerConfig = (configName) => {
       return {
         designer: {
           mainWindow: {
-            canvas: {
-              leftSplitter: {
-                enabled: true,
-              },
-              rightSplitter: {
-                enabled: true,
-              },
-              leftCollapse: {
-                enabled: true,
-              },
-              rightCollapse: {
-                enabled: true,
-              },
-            },
             controlPalette: {
               startingWidth: '260px',
               controls: {
-                accordion: {
-                  configName: 'multiplePanelContainer',
-                  shown: false,
-                  supported: false,
-                },
-                'action-bar': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
-                },
-                button: {
-                  shown: false,
-                  supported: false,
-                },
                 canvas: {
                   configName: 'canvas',
                   shown: true,
@@ -51,7 +23,6 @@ export const getDesignerConfig = (configName) => {
                 'check-box': {
                   configName: 'inputWithNoTextField',
                   shown: false,
-                  supported: true,
                 },
                 'control-container': {
                   configName: 'container',
@@ -62,12 +33,10 @@ export const getDesignerConfig = (configName) => {
                   date: {
                     configName: 'inputWithTextFieldNoTypeSelection',
                     shown: false,
-                    supported: true,
                   },
                   dateTime: {
                     configName: 'inputWithTextFieldNoTypeSelection',
                     shown: false,
-                    supported: true,
                   },
                 },
                 'form-container': {
@@ -75,28 +44,10 @@ export const getDesignerConfig = (configName) => {
                   shown: true,
                   supported: true,
                 },
-                'h-flex': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
-                },
-                image: {
-                  shown: false,
-                  supported: false,
-                },
-                'image-button': {
-                  shown: false,
-                  supported: false,
-                },
                 label: {
                   configName: 'label',
                   shown: true,
                   supported: true,
-                },
-                'radio-group': {
-                  configName: 'inputWithTextField',
-                  shown: false,
-                  supported: false,
                 },
                 'responsive-form-grid': {
                   configName: 'default',
@@ -111,17 +62,11 @@ export const getDesignerConfig = (configName) => {
                 'select-box': {
                   configName: 'selectBox',
                   shown: false,
-                  supported: true,
                 },
                 separator: {
                   configName: 'default',
                   shown: true,
                   supported: true,
-                },
-                table: {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
                 },
                 tabs: {
                   configName: 'multiplePanelContainer',
@@ -131,53 +76,36 @@ export const getDesignerConfig = (configName) => {
                 'text-area': {
                   configName: 'inputWithTextField',
                   shown: false,
-                  supported: true,
                 },
                 'text-box': {
                   number: {
                     configName: 'inputWithTextFieldAndInputAndInputAlignment',
                     shown: false,
-                    supported: true,
                   },
                   integer: {
                     configName: 'inputWithTextFieldAndInputAndInputAlignment',
                     shown: false,
-                    supported: true,
                   },
                   string: {
                     configName: 'inputWithTextField',
                     shown: false,
-                    supported: true,
                   },
                 },
                 'toggle-switch': {
                   configName: 'inputWithNoTextField',
                   shown: false,
-                  supported: true,
-                },
-                upload: {
-                  shown: false,
-                  supported: false,
                 },
                 'user-control': {
                   configName: 'inputWithTextField',
                   shown: false,
-                  supported: true,
-                },
-                'v-flex': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
                 },
               },
               sections: {
                 models: {
                   collapsible: false,
-                  collapsedByDefault: false,
                   facets: {},
                   maxHeight: 70,
                   search: false,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -211,11 +139,8 @@ export const getDesignerConfig = (configName) => {
                 },
                 components: {
                   collapsible: false,
-                  collapsedByDefault: false,
                   facets: {},
                   maxHeight: 30,
-                  search: false,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -247,50 +172,9 @@ export const getDesignerConfig = (configName) => {
                     },
                   },
                 },
-                templates: {
-                  collapsible: true,
-                  collapsedByDefault: true,
-                  facets: {},
-                  maxHeight: 20,
-                  search: true,
-                  shown: false,
-                  type: 'list',
-                  title: {
-                    de: {
-                      text: 'Vorlagen',
-                    },
-                    en: {
-                      text: 'Templates',
-                    },
-                    es: {
-                      text: 'Plantillas',
-                    },
-                    fr: {
-                      text: 'Modèles',
-                    },
-                    it: {
-                      text: 'Modelli',
-                    },
-                    ja: {
-                      text: 'テンプレート',
-                    },
-                    nl: {
-                      text: 'Sjablonen',
-                    },
-                    pl: {
-                      text: 'Szablony',
-                    },
-                    pt: {
-                      text: 'Modelos',
-                    },
-                  },
-                },
               },
             },
             toolbar: {
-              addTemplate: {
-                shown: false,
-              },
               preview: {
                 shown: false,
               },
@@ -299,12 +183,6 @@ export const getDesignerConfig = (configName) => {
               },
               redo: {
                 hide: false,
-              },
-              saveLayoutTemplate: {
-                shown: false,
-              },
-              saveTemplate: {
-                shown: false,
               },
               undo: {
                 hide: false,
@@ -455,7 +333,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto',
                       },
                       id: 'bd2d8fc69be24a8b8568ee4fd51ef179',
                       controls: [
@@ -570,7 +449,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto',
                       },
                       id: 'd537023fe06b43a0bc6570bf31c75d9b',
                       border: 'border: 0 solid #ddd',
@@ -738,7 +618,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 4,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'd98ba69182b64e61bba26cab30fca41e',
                         },
@@ -846,7 +727,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 6,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'e02a260ca39642d5a7f26d2be24fe030',
                         },
@@ -903,7 +785,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'ea4909ec3ba6456ab77f9c1d336223b5',
                         },
@@ -965,7 +848,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'c8fda3bfab5f45659c1997dde26bbc8f',
                         },
@@ -1026,7 +910,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'runtime.rearrangeControlsForSmallScreens',
+                          propertyPath:
+                            'runtime.rearrangeControlsForSmallScreens',
                           type: 'toggle-switch',
                           id: 'd92b7a141cf242a091eb672d3c079a9b',
                         },
@@ -1048,7 +933,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto auto',
                       },
                       id: 'c6af7308cc9741ccbb9f38373919fc25',
                       controls: [
@@ -1175,7 +1061,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto auto',
                       },
                       id: 'a3bedaacc3ce414b84c46776f1d75667',
                       controls: [
@@ -1386,12 +1273,6 @@ export const getDesignerConfig = (configName) => {
                 },
               },
             },
-          },
-          previewWindow: {
-            defaultResolution: 'mobile',
-            designerJSON: { hide: false },
-            runtimeJSON: { hide: false },
-            formSchema: { hide: true },
           },
         },
       };
@@ -1399,37 +1280,9 @@ export const getDesignerConfig = (configName) => {
       return {
         designer: {
           mainWindow: {
-            canvas: {
-              leftSplitter: {
-                enabled: true,
-              },
-              rightSplitter: {
-                enabled: true,
-              },
-              leftCollapse: {
-                enabled: true,
-              },
-              rightCollapse: {
-                enabled: true,
-              },
-            },
             controlPalette: {
               startingWidth: '260px',
               controls: {
-                accordion: {
-                  configName: 'multiplePanelContainer',
-                  shown: false,
-                  supported: false,
-                },
-                'action-bar': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
-                },
-                button: {
-                  shown: false,
-                  supported: false,
-                },
                 canvas: {
                   configName: 'canvas',
                   shown: true,
@@ -1462,28 +1315,10 @@ export const getDesignerConfig = (configName) => {
                   shown: true,
                   supported: true,
                 },
-                'h-flex': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
-                },
-                image: {
-                  shown: false,
-                  supported: false,
-                },
-                'image-button': {
-                  shown: false,
-                  supported: false,
-                },
                 label: {
                   configName: 'label',
                   shown: true,
                   supported: true,
-                },
-                'radio-group': {
-                  configName: 'inputWithTextField',
-                  shown: false,
-                  supported: false,
                 },
                 'responsive-form-grid': {
                   configName: 'default',
@@ -1504,11 +1339,6 @@ export const getDesignerConfig = (configName) => {
                   configName: 'default',
                   shown: true,
                   supported: true,
-                },
-                table: {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
                 },
                 tabs: {
                   configName: 'multiplePanelContainer',
@@ -1542,67 +1372,15 @@ export const getDesignerConfig = (configName) => {
                   shown: true,
                   supported: true,
                 },
-                upload: {
-                  shown: false,
-                  supported: false,
-                },
-                'user-control': {
-                  configName: 'inputWithTextField',
-                  shown: false,
-                  supported: true,
-                },
-                'v-flex': {
-                  configName: 'default',
-                  shown: false,
-                  supported: false,
-                },
               },
               sections: {
                 models: {
-                  collapsible: false,
-                  collapsedByDefault: false,
-                  facets: {},
-                  maxHeight: 0,
-                  search: false,
                   shown: false,
-                  type: 'list',
-                  title: {
-                    de: {
-                      text: 'Modellattribute',
-                    },
-                    en: {
-                      text: 'Model attributes',
-                    },
-                    es: {
-                      text: 'Atributos del modelo',
-                    },
-                    fr: {
-                      text: 'Attributs du modèle',
-                    },
-                    it: {
-                      text: 'Attributi del modello',
-                    },
-                    ja: {
-                      text: 'モデルの属性',
-                    },
-                    nl: {
-                      text: 'Modelattributen',
-                    },
-                    pl: {
-                      text: 'Atrybuty modelu',
-                    },
-                    pt: {
-                      text: 'Atributos do modelo',
-                    },
-                  },
                 },
                 components: {
                   collapsible: false,
-                  collapsedByDefault: false,
                   facets: {},
                   maxHeight: 100,
-                  search: false,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -1634,50 +1412,9 @@ export const getDesignerConfig = (configName) => {
                     },
                   },
                 },
-                templates: {
-                  collapsible: true,
-                  collapsedByDefault: true,
-                  facets: {},
-                  maxHeight: 0,
-                  search: true,
-                  shown: false,
-                  type: 'list',
-                  title: {
-                    de: {
-                      text: 'Vorlagen',
-                    },
-                    en: {
-                      text: 'Templates',
-                    },
-                    es: {
-                      text: 'Plantillas',
-                    },
-                    fr: {
-                      text: 'Modèles',
-                    },
-                    it: {
-                      text: 'Modelli',
-                    },
-                    ja: {
-                      text: 'テンプレート',
-                    },
-                    nl: {
-                      text: 'Sjablonen',
-                    },
-                    pl: {
-                      text: 'Szablony',
-                    },
-                    pt: {
-                      text: 'Modelos',
-                    },
-                  },
-                },
               },
             },
             toolbar: {
-              addTemplate: {
-                shown: false,
-              },
               preview: {
                 shown: false,
               },
@@ -1686,12 +1423,6 @@ export const getDesignerConfig = (configName) => {
               },
               redo: {
                 hide: false,
-              },
-              saveLayoutTemplate: {
-                shown: false,
-              },
-              saveTemplate: {
-                shown: false,
               },
               undo: {
                 hide: false,
@@ -1842,7 +1573,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto',
                       },
                       id: 'bd2d8fc69be24a8b8568ee4fd51ef179',
                       controls: [
@@ -1957,7 +1689,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto',
                       },
                       id: 'd537023fe06b43a0bc6570bf31c75d9b',
                       border: 'border: 0 solid #ddd',
@@ -2125,7 +1858,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 4,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'd98ba69182b64e61bba26cab30fca41e',
                         },
@@ -2233,7 +1967,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 6,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'e02a260ca39642d5a7f26d2be24fe030',
                         },
@@ -2290,7 +2025,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'ea4909ec3ba6456ab77f9c1d336223b5',
                         },
@@ -2352,7 +2088,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'designer.grid.inheritParentColumnCount',
+                          propertyPath:
+                            'designer.grid.inheritParentColumnCount',
                           type: 'toggle-switch',
                           id: 'c8fda3bfab5f45659c1997dde26bbc8f',
                         },
@@ -2413,7 +2150,8 @@ export const getDesignerConfig = (configName) => {
                           gridColumnEnd: 1,
                           gridRowStart: 2,
                           gridRowEnd: 1,
-                          propertyPath: 'runtime.rearrangeControlsForSmallScreens',
+                          propertyPath:
+                            'runtime.rearrangeControlsForSmallScreens',
                           type: 'toggle-switch',
                           id: 'd92b7a141cf242a091eb672d3c079a9b',
                         },
@@ -2435,7 +2173,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto auto',
                       },
                       id: 'c6af7308cc9741ccbb9f38373919fc25',
                       controls: [
@@ -2562,7 +2301,8 @@ export const getDesignerConfig = (configName) => {
                       numberOfColumns: 1,
                       grid: {
                         gap: 20,
-                        gridTemplateRows: 'auto auto auto auto auto auto auto auto auto',
+                        gridTemplateRows:
+                          'auto auto auto auto auto auto auto auto auto',
                       },
                       id: 'a3bedaacc3ce414b84c46776f1d75667',
                       controls: [
@@ -2774,32 +2514,12 @@ export const getDesignerConfig = (configName) => {
               },
             },
           },
-          previewWindow: {
-            defaultResolution: 'mobile',
-            designerJSON: { hide: false },
-            runtimeJSON: { hide: false },
-            formSchema: { hide: true },
-          },
         },
       };
     case DesignerConfigNames.standard:
       return {
         designer: {
           mainWindow: {
-            canvas: {
-              leftSplitter: {
-                enabled: true,
-              },
-              rightSplitter: {
-                enabled: true,
-              },
-              leftCollapse: {
-                enabled: true,
-              },
-              rightCollapse: {
-                enabled: true,
-              },
-            },
             controlPalette: {
               startingWidth: '260px',
               controls: {
@@ -2912,11 +2632,13 @@ export const getDesignerConfig = (configName) => {
                     configName: 'inputWithTextFieldAndInputAndInputAlignment',
                     shown: true,
                     supported: true,
+                    numericInputAlignment: 'start',
                   },
                   integer: {
                     configName: 'inputWithTextFieldAndInputAndInputAlignment',
                     shown: true,
                     supported: true,
+                    numericInputAlignment: 'start',
                   },
                   string: {
                     configName: 'inputWithTextField',
@@ -2935,7 +2657,7 @@ export const getDesignerConfig = (configName) => {
                 },
                 'user-control': {
                   configName: 'inputWithTextField',
-                  shown: false,
+                  shown: true,
                   supported: true,
                 },
                 'v-flex': {
@@ -2946,12 +2668,8 @@ export const getDesignerConfig = (configName) => {
               },
               sections: {
                 models: {
-                  collapsible: true,
-                  collapsedByDefault: false,
                   facets: {},
                   maxHeight: 70,
-                  search: true,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -2984,12 +2702,8 @@ export const getDesignerConfig = (configName) => {
                   },
                 },
                 components: {
-                  collapsible: true,
-                  collapsedByDefault: false,
-                  facets: {},
                   maxHeight: 70,
                   search: true,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -3021,50 +2735,116 @@ export const getDesignerConfig = (configName) => {
                     },
                   },
                 },
-                templates: {
-                  collapsible: true,
-                  collapsedByDefault: true,
-                  facets: {},
-                  maxHeight: 0,
-                  search: false,
-                  shown: false,
-                  type: 'list',
-                  title: {
-                    de: {
-                      text: 'Vorlagen',
+              },
+            },
+            properties: {
+              iframe: {
+                linkList: {
+                  allowFreeText: true,
+                  links: [
+                    {
+                      displayName: 'Thrust API Video',
+                      url: 'https://www.youtube.com/embed/VohGVyhIo3c?si=mkqAskfk6uvahrVq',
                     },
-                    en: {
-                      text: 'Templates',
+                    {
+                      displayName: 'Folder Widget',
+                      url: 'https://corecontent-c4sapqe.qe.bp-paas.otxlab.net/subscriptions/innovate4-qa/workspaces?nodeid=f68716fe-5a9b-4c5c-a2a4-7c45c51e7c64&breadcrumb=true&favorites=${favorites}&search=${search}&backButton=true&showRelatedWorkspaces=true&resizeWidget=true&commandsToBlacklist=',
                     },
-                    es: {
-                      text: 'Plantillas',
+                    // ${favorites} property paths of the control that user wants to get the value from.
+                    {
+                      displayName: 'React components',
+                      url: 'https://elliot.otxlab.net/ot-web-components/?path=/story/components-multi-value--input-date&globals=theme:dark',
                     },
-                    fr: {
-                      text: 'Modèles',
-                    },
-                    it: {
-                      text: 'Modelli',
-                    },
-                    ja: {
-                      text: 'テンプレート',
-                    },
-                    nl: {
-                      text: 'Sjablonen',
-                    },
-                    pl: {
-                      text: 'Szablony',
-                    },
-                    pt: {
-                      text: 'Modelos',
-                    },
-                  },
+                  ],
                 },
+                sandboxOptions: [
+                  {
+                    text: 'allow-forms',
+                    value: 'allow-forms',
+                  },
+                  {
+                    text: 'allow-pointer-lock',
+                    value: 'allow-pointer-lock',
+                  },
+                  {
+                    text: 'allow-popups',
+                    value: 'allow-popups',
+                  },
+                  {
+                    text: 'allow-same-origin',
+                    value: 'allow-same-origin',
+                  },
+                  {
+                    text: 'allow-scripts',
+                    value: 'allow-scripts',
+                  },
+                  {
+                    text: 'allow-top-navigation',
+                    value: 'allow-top-navigation',
+                  },
+                ],
+                referrerPolices: [
+                  {
+                    text: 'no-referrer',
+                    value: 'no-referrer',
+                  },
+                  {
+                    text: 'no-referrer-when-downgrade',
+                    value: 'no-referrer-when-downgrade',
+                  },
+                  {
+                    text: 'origin',
+                    value: 'origin',
+                  },
+                  {
+                    text: 'origin-when-cross-origin',
+                    value: 'origin-when-cross-origin',
+                  },
+                  {
+                    text: 'same-origin',
+                    value: 'same-origin',
+                  },
+                  {
+                    text: 'strict-origin-when-cross-origin',
+                    value: 'strict-origin-when-cross-origin',
+                  },
+                ],
+              },
+              link: {
+                linkList: {
+                  allowFreeText: true,
+                  links: [
+                    {
+                      displayName: 'Forms API - Documentation',
+                      url: 'https://developer.opentext.com/services/products/forms-service/documentation/forms-thrust-api-reference/1',
+                    },
+                    {
+                      displayName: 'UI Designer - Documentation',
+                      url: 'https://developer.opentext.com/services/products/forms-service/documentation/forms-ui-designer/2',
+                    },
+                  ],
+                },
+                referrerPolices: [
+                  {
+                    text: 'no-referrer',
+                    value: 'no-referrer',
+                  },
+                  {
+                    text: 'no-referrer-when-downgrade',
+                    value: 'no-referrer-when-downgrade',
+                  },
+                  {
+                    text: 'origin',
+                    value: 'origin',
+                  },
+                  {
+                    text: 'origin-when-cross-origin',
+                    value: 'origin-when-cross-origin',
+                  },
+                ],
               },
             },
             toolbar: {
-              addTemplate: {
-                shown: false,
-              },
               preview: {
                 shown: false,
               },
@@ -3074,22 +2854,10 @@ export const getDesignerConfig = (configName) => {
               redo: {
                 hide: false,
               },
-              saveLayoutTemplate: {
-                shown: false,
-              },
-              saveTemplate: {
-                shown: false,
-              },
               undo: {
                 hide: false,
               },
             },
-          },
-          previewWindow: {
-            defaultResolution: 'mobile',
-            designerJSON: { hide: false },
-            runtimeJSON: { hide: false },
-            formSchema: { hide: true },
           },
         },
       };
@@ -3097,20 +2865,6 @@ export const getDesignerConfig = (configName) => {
       return {
         designer: {
           mainWindow: {
-            canvas: {
-              leftSplitter: {
-                enabled: true,
-              },
-              rightSplitter: {
-                enabled: true,
-              },
-              leftCollapse: {
-                enabled: true,
-              },
-              rightCollapse: {
-                enabled: true,
-              },
-            },
             controlPalette: {
               startingWidth: '260px',
               controls: {
@@ -3128,38 +2882,6 @@ export const getDesignerConfig = (configName) => {
                   shown: true,
                   supported: true,
                 },
-                canvas: {
-                  configName: 'canvas',
-                  shown: true,
-                  supported: true,
-                },
-                'check-box': {
-                  configName: 'inputWithNoTextField',
-                  shown: true,
-                  supported: true,
-                },
-                'control-container': {
-                  configName: 'container',
-                  shown: true,
-                  supported: true,
-                },
-                datetime: {
-                  date: {
-                    configName: 'inputWithTextFieldNoTypeSelection',
-                    shown: true,
-                    supported: true,
-                  },
-                  dateTime: {
-                    configName: 'inputWithTextFieldNoTypeSelection',
-                    shown: true,
-                    supported: true,
-                  },
-                },
-                'form-container': {
-                  configName: 'form',
-                  shown: true,
-                  supported: true,
-                },
                 'h-flex': {
                   configName: 'default',
                   shown: true,
@@ -3173,79 +2895,17 @@ export const getDesignerConfig = (configName) => {
                   shown: true,
                   supported: true,
                 },
-                label: {
-                  configName: 'label',
-                  shown: true,
-                  supported: true,
-                },
                 'radio-group': {
                   configName: 'inputWithTextField',
                   shown: true,
                   supported: true,
                 },
-                'responsive-form-grid': {
-                  configName: 'default',
-                  shown: false,
-                  supported: true,
-                },
-                section: {
-                  configName: 'section',
-                  shown: true,
-                  supported: true,
-                },
-                'select-box': {
-                  configName: 'selectBox',
-                  shown: true,
-                  supported: true,
-                },
-                separator: {
-                  configName: 'default',
-                  shown: true,
-                  supported: true,
-                },
                 table: {
-                  configName: 'default',
-                  shown: true,
-                  supported: true,
-                },
-                tabs: {
-                  configName: 'multiplePanelContainer',
-                  shown: true,
-                  supported: true,
-                },
-                'text-area': {
-                  configName: 'inputWithTextField',
-                  shown: true,
-                  supported: true,
-                },
-                'text-box': {
-                  number: {
-                    configName: 'inputWithTextFieldAndInputAndInputAlignment',
-                    shown: true,
-                    supported: true,
-                  },
-                  integer: {
-                    configName: 'inputWithTextFieldAndInputAndInputAlignment',
-                    shown: true,
-                    supported: true,
-                  },
-                  string: {
-                    configName: 'inputWithTextField',
-                    shown: true,
-                    supported: true,
-                  },
-                },
-                'toggle-switch': {
-                  configName: 'inputWithNoTextField',
+                  configName: 'data-grid',
                   shown: true,
                   supported: true,
                 },
                 upload: {
-                  shown: true,
-                  supported: true,
-                },
-                'user-control': {
-                  configName: 'inputWithTextField',
                   shown: true,
                   supported: true,
                 },
@@ -3257,12 +2917,9 @@ export const getDesignerConfig = (configName) => {
               },
               sections: {
                 models: {
-                  collapsible: true,
-                  collapsedByDefault: false,
                   facets: {},
                   maxHeight: 70,
                   search: true,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -3296,11 +2953,8 @@ export const getDesignerConfig = (configName) => {
                 },
                 components: {
                   collapsible: true,
-                  collapsedByDefault: false,
-                  facets: {},
                   maxHeight: 70,
                   search: true,
-                  shown: true,
                   type: 'list',
                   title: {
                     de: {
@@ -3333,11 +2987,9 @@ export const getDesignerConfig = (configName) => {
                   },
                 },
                 templates: {
-                  collapsible: true,
                   collapsedByDefault: true,
                   facets: {},
                   maxHeight: 50,
-                  search: false,
                   shown: true,
                   type: 'list',
                   title: {
@@ -3376,9 +3028,6 @@ export const getDesignerConfig = (configName) => {
               addTemplate: {
                 shown: true,
               },
-              preview: {
-                shown: true,
-              },
               delete: {
                 hide: false,
               },
@@ -3395,12 +3044,6 @@ export const getDesignerConfig = (configName) => {
                 hide: false,
               },
             },
-          },
-          previewWindow: {
-            defaultResolution: 'mobile',
-            designerJSON: { hide: false },
-            runtimeJSON: { hide: false },
-            formSchema: { hide: false },
           },
         },
       };

@@ -7,6 +7,8 @@ import AppContext from './app-context';
 
 function AppContextProvider({ children }) {
   const [activeForm, setActiveForm] = useState(() => sessionStorage.getItem('activeForm') || '');
+  const [activeRuntime, setActiveRuntime] = useState(() => sessionStorage.getItem('activeRuntime') || '');
+  const [activeThemes, setActiveThemes] = useState(() => JSON.parse(sessionStorage.getItem('activeThemes') || '{}'));
   const [formClient, setFormClient] = useState(() => {
     const formClientSessionStorage = sessionStorage.getItem('formClient');
     if (formClientSessionStorage) {
@@ -24,6 +26,11 @@ function AppContextProvider({ children }) {
   const [notificationProps, setNotificationProps] = useState({ message: '', type: '' });
   const [spinnerMessage, setSpinnerMessage] = useState('');
   const [unsavedLocalForms, setUnsavedLocalForms] = useState(() => JSON.parse(sessionStorage.getItem('unsavedLocalForms')) || []);
+  const [refreshLocalList, setRefreshLocalList] = useState(0);
+  const [refreshRemoteList, setRefreshRemoteList] = useState(0);
+  const [refreshCheckpointList, setRefreshCheckpointList] = useState(0);
+  const [isFormDesignChanged, setIsFormDesignChanged] = useState(false);
+  const [currentLocale, setCurrentLocale] = useState(process.env.REACT_APP_CURRENT_LOCALE);
 
   const hideSpinner = () => {
     setIsSpinnerVisible(false);
@@ -35,7 +42,9 @@ function AppContextProvider({ children }) {
     setIsSpinnerVisible(true);
   };
 
-  const showNotification = (message, type) => setNotificationProps({ message, type });
+  const showNotification = useCallback((message, type) => (
+    setNotificationProps({ message, type })
+  ), [setNotificationProps]);
 
   const setIsUnsaved = (localReference, isUnsaved) => {
     if (isUnsaved) {
@@ -52,25 +61,17 @@ function AppContextProvider({ children }) {
     unsavedLocalForms.includes(localReference)
   ), [unsavedLocalForms]);
 
-  const setDataSourceErrorHandler = useCallback((dataSourceKey, dataSourceErrorCallback) => {
-    formClient?.updateConfig(
-      {
-        runtimeConfig: {
-          controlConfig: {
-            dataSource: {
-              [dataSourceKey]: {
-                config: {
-                  ...formClient?.getConfig()
-                    .runtimeConfig.controlConfig.dataSource[dataSourceKey].config,
-                },
-                errorCallback: dataSourceErrorCallback,
-              },
-            },
-          },
-        },
-      },
-    );
-  }, [formClient]);
+  const setUnsavedChangesFlag = (value) => {
+    const UNSAVED_CHANGES_FLAG_KEY = 'hasUnsavedChanges';
+    sessionStorage.setItem(UNSAVED_CHANGES_FLAG_KEY, value);
+  };
+
+  const setChangesFlagForActiveForm = useCallback(() => {
+    if (activeForm && formClient) {
+      formClient?.hasFormUnsavedChanges({ localReference: activeForm })
+        .then((value) => setUnsavedChangesFlag(value));
+    }
+  }, [activeForm, formClient]);
 
   /* Store context elements that should persist across screens in session storage
   to ensure they don't get lost as long as the browser session is active */
@@ -106,36 +107,70 @@ function AppContextProvider({ children }) {
     }
   }, [unsavedLocalForms]);
 
+  useEffect(() => {
+    if (activeThemes) {
+      sessionStorage.setItem('activeThemes', JSON.stringify(activeThemes));
+      formClient?.updateConfig({
+        themes: Object.keys(activeThemes).length > 0 ? activeThemes : null,
+      });
+    } else {
+      sessionStorage.removeItem('activeThemes');
+    }
+  }, [activeThemes, formClient]);
+
   const value = useMemo(() => (
     {
       activeForm,
+      activeRuntime,
+      activeThemes,
       formClient,
       isSpinnerVisible,
       isUpdated,
       notificationProps,
+      refreshLocalList,
+      refreshRemoteList,
+      refreshCheckpointList,
       selectedDesignerConfig,
       spinnerMessage,
+      isFormDesignChanged,
+      currentLocale,
       hideSpinner,
       isUnsaved,
-      setDataSourceErrorHandler,
       setActiveForm,
+      setActiveRuntime,
+      setActiveThemes,
       setFormClient,
+      setUnsavedChangesFlag,
+      setChangesFlagForActiveForm,
       setIsUnsaved,
       setIsUpdated,
+      setRefreshLocalList,
+      setRefreshRemoteList,
+      setRefreshCheckpointList,
       showNotification,
       setSelectedDesignerConfig,
       showSpinner,
+      setIsFormDesignChanged,
+      setCurrentLocale,
     }
   ), [
     activeForm,
+    activeRuntime,
+    activeThemes,
     formClient,
     isSpinnerVisible,
     isUpdated,
     notificationProps,
+    refreshLocalList,
+    refreshRemoteList,
+    refreshCheckpointList,
     selectedDesignerConfig,
     spinnerMessage,
+    isFormDesignChanged,
+    currentLocale,
     isUnsaved,
-    setDataSourceErrorHandler,
+    showNotification,
+    setChangesFlagForActiveForm,
   ]);
 
   return (

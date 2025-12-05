@@ -9,7 +9,12 @@ import SetCheckpointModal from './SetCheckpointModal';
 import ResetToCheckpointModal from './ResetToCheckpointModal';
 
 const CheckpointControl = forwardRef((_, ref) => {
-  const { activeForm, formClient } = useContext(AppContext);
+  const {
+    activeForm,
+    formClient,
+    refreshCheckpointList,
+    setChangesFlagForActiveForm,
+  } = useContext(AppContext);
   const [checkpoints, setCheckpoints] = useState([]);
   const [showSetCheckpointModal, setShowSetCheckpointModal] = useState(false);
   const [showResetToCheckpointModal, setShowResetToCheckpointModal] = useState(false);
@@ -22,6 +27,7 @@ const CheckpointControl = forwardRef((_, ref) => {
         setCheckpoints(formCheckpoints);
         setCanSetCheckpoint(false);
       });
+    setChangesFlagForActiveForm();
   };
 
   useImperativeHandle(ref, () => ({
@@ -30,7 +36,7 @@ const CheckpointControl = forwardRef((_, ref) => {
     refreshCheckpoints,
   }));
 
-  useEffect(refreshCheckpoints, [activeForm, formClient]);
+  useEffect(refreshCheckpoints, [activeForm, formClient, refreshCheckpointList]);
 
   return (
     <Row className="align-items-center">

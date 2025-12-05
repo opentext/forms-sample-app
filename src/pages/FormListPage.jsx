@@ -5,30 +5,34 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Tab, Tabs } from 'react-bootstrap';
-import { convertStringToNumber } from '../utils/string-util';
 import AppContext from '../store/context/app-context';
 import { notificationTypes } from '../components/Notification';
 import Toolbar from '../components/Toolbar';
 import DesignerConfigPicker from '../components/DesignerConfigPicker';
-import FormsTable from '../components/FormsTable';
+import FormsTableLocal from '../components/FormsTableLocal';
+import FormsTableRemote from '../components/FormsTableRemote';
 import FormSpecsModal from '../components/FormSpecsModal';
+import ImportModal from '../components/ImportModal';
+import AclModal from '../components/AclModal';
 
 function FormSpecsPage() {
   const {
     activeForm,
     formClient,
     isSpinnerVisible,
+    refreshLocalList,
+    refreshRemoteList,
     hideSpinner,
     isUnsaved,
     setActiveForm,
     setIsUnsaved,
+    setRefreshLocalList,
+    setRefreshRemoteList,
     showNotification,
     showSpinner,
   } = useContext(AppContext);
   const navigate = useNavigate();
   const [remoteForm, setRemoteForm] = useState();
-  const [localForms, setLocalForms] = useState([]);
-  const [remoteForms, setRemoteForms] = useState([]);
   const [clearSelectedLocalFormToggle, setClearSelectedLocalFormToggle] = useState(false);
   const [clearSelectedRemoteFormToggle, setClearSelectedRemoteFormToggle] = useState(false);
   const [canCreate, setCanCreate] = useState(true);
@@ -38,41 +42,19 @@ function FormSpecsPage() {
   const [canRun, setCanRun] = useState(false);
   const [canEditSpecs, setCanEditSpecs] = useState(false);
   const [showFormSpecsModal, setShowFormSpecsModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showAclModal, setShowAclModal] = useState(false);
+  const [currentAcl, setCurrentAcl] = useState(null);
+  const [isEditAcl, setIsEditAcl] = useState(false);
   const isMounted = useRef(false);
 
   const refreshLocalFormsList = useCallback(() => {
-    if (formClient) {
-      formClient.listLocalForms({})
-        .then((localFormsList) => setLocalForms(
-          localFormsList.map((localForm) => (
-            { localRef: localForm.localRef, ...localForm.metadata }
-          )),
-        ));
-    }
-  }, [formClient]);
+    setRefreshLocalList(refreshLocalList + 1);
+  }, [refreshLocalList, setRefreshLocalList]);
 
   const refreshRemoteFormsList = useCallback(() => {
-    if (formClient) {
-      showSpinner(('Retrieving remote forms...'));
-      formClient.listRemoteForms({
-        size: convertStringToNumber(process.env.REACT_APP_REMOTE_LIST_SIZE, 100),
-      })
-        .then((remoteFormsList) => {
-          setRemoteForms(
-            remoteFormsList,
-          );
-          hideSpinner();
-        })
-        .catch((err) => {
-          hideSpinner();
-          /* If no error message, this is because the access token needs refreshing,
-          so in that case not raising any error notification */
-          if (err?.message) {
-            showNotification(`Error fetching remote forms list: ${err.message}`, notificationTypes.error);
-          }
-        });
-    }
-  }, [formClient, hideSpinner, showNotification, showSpinner]);
+    setRefreshRemoteList(refreshRemoteList + 1);
+  }, [refreshRemoteList, setRefreshRemoteList]);
 
   const handleOnFormDeselect = () => {
     setActiveForm();
@@ -110,6 +92,18 @@ function FormSpecsPage() {
     setShowFormSpecsModal(false);
   };
 
+  const handleOnImportModalClose = () => {
+    refreshLocalFormsList();
+    refreshRemoteFormsList();
+    setShowImportModal(false);
+  };
+
+  const handleOnAclModalClose = () => {
+    setShowAclModal(false);
+    setCurrentAcl(null);
+    setIsEditAcl(false);
+  };
+
   const handleOnClickLoad = () => {
     showSpinner('Loading form...');
     formClient.loadForm({ namespace: remoteForm?.namespace, name: remoteForm?.name })
@@ -122,9 +116,58 @@ function FormSpecsPage() {
         hideSpinner();
       })
       .catch((err) => {
-        showNotification(err.message, notificationTypes.error);
         hideSpinner();
+        showNotification(err.message, notificationTypes.error);
       });
+  };
+
+  const handleOnClickExport = async () => {
+    showSpinner('Exporting form...');
+    formClient.exportForm({ localReference: activeForm })
+      .then(async (exportedForm) => {
+        const name = exportedForm.data?.name ?? 'form';
+        const content = new Blob([JSON.stringify(exportedForm, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(content);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${name}.otui`;
+        document.body.appendChild(link);
+        link.click();
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        hideSpinner();
+      })
+      .catch((err) => {
+        hideSpinner();
+        showNotification(err.message, notificationTypes.error);
+      });
+  };
+  const handleOnClickDelete = () => {
+    showSpinner('Deleting form...');
+    formClient.deleteLocalForm({
+      localReference: activeForm,
+      deleteRemote: true,
+      force: false,
+    /*
+    formClient.deleteRemoteForm({
+      namespace: remoteForm?.namespace,
+      name: remoteForm?.name,
+      force: false,
+      deleteLocal: false,
+    */
+    }).then(() => {
+      setIsUnsaved(activeForm, false);
+      setActiveForm();
+      setRemoteForm();
+      setCanSave(false);
+      setCanLoad(false);
+      refreshLocalFormsList();
+      hideSpinner();
+    }).catch((err) => {
+      hideSpinner();
+      showNotification(err.message, notificationTypes.error);
+    });
   };
 
   const handleOnClickSave = async () => {
@@ -198,6 +241,16 @@ function FormSpecsPage() {
           onUnsaved={handleUnsaved}
         />
       )}
+      <ImportModal
+        show={showImportModal}
+        onHide={handleOnImportModalClose}
+      />
+      <AclModal
+        show={showAclModal}
+        onHide={handleOnAclModalClose}
+        acl={currentAcl}
+        isEdit={isEditAcl}
+      />
       <Toolbar
         title="Local and Remote Forms"
         buttons={[
@@ -217,6 +270,16 @@ function FormSpecsPage() {
             onClick: handleOnClickLoad,
           },
           {
+            label: 'IMPORT',
+            visible: canCreate,
+            onClick: () => setShowImportModal(true),
+          },
+          {
+            label: 'EXPORT',
+            visible: canEditSpecs,
+            onClick: handleOnClickExport,
+          },
+          {
             disabled: !canSave,
             label: 'SAVE',
             visible: canEditSpecs,
@@ -232,6 +295,10 @@ function FormSpecsPage() {
             label: 'RUN',
             onClick: () => navigate('/runtime'),
           },
+          {
+            label: 'DELETE',
+            onClick: handleOnClickDelete,
+          },
         ]}
       >
         <DesignerConfigPicker />
@@ -239,18 +306,14 @@ function FormSpecsPage() {
       <Container fluid>
         <Tabs className="pt-2">
           <Tab eventKey="localForms" title="Local forms" className="form-list-tab">
-            <FormsTable
+            <FormsTableLocal
               clearSelectedRow={clearSelectedLocalFormToggle}
-              forms={localForms}
-              keyField="localRef"
               onFormSelect={handleOnLocalFormSelect}
             />
           </Tab>
           <Tab eventKey="remoteForms" title="Remote forms" className="form-list-tab">
-            <FormsTable
+            <FormsTableRemote
               clearSelectedRow={clearSelectedRemoteFormToggle}
-              forms={remoteForms}
-              keyField="id"
               onFormSelect={handleOnRemoteFormSelect}
             />
           </Tab>

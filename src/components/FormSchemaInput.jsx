@@ -54,6 +54,7 @@ function FormSchemaInput({
       setIsValid(true);
     } catch (err) {
       setSchemaJson('');
+      setSchemaDefinition('');
       handleInvalidSchema();
     }
   };
@@ -84,6 +85,7 @@ function FormSchemaInput({
         // Only set value of schemaJson to schema if incoming schema is truly different
         if (
           schemaJson === undefined
+          ||schemaJson === ''
           || JSON.stringify(JSON.parse(schemaJson), null, 2) !== schemaDefinitionToString
         ) {
           setSchemaJson(schemaDefinitionToString);

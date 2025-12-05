@@ -5,7 +5,7 @@ import { FORM_DESIGNER_ELEMENT_ID } from './FormDesigner';
 import AppContext from '../store/context/app-context';
 
 function SetCheckpointModal({ show, refreshCheckpoints, setShow }) {
-  const { formClient } = useContext(AppContext);
+  const { formClient, setIsFormDesignChanged } = useContext(AppContext);
   const [checkpointName, setCheckpointName] = useState('');
   const [validated, setValidated] = useState(false);
 
@@ -17,6 +17,7 @@ function SetCheckpointModal({ show, refreshCheckpoints, setShow }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsFormDesignChanged(true);
     if (event.currentTarget.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);

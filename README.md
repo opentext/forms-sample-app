@@ -16,10 +16,13 @@ REACT_APP_CLIENT_ID=<client ID, refer ot step 6 in the Admin Center section belo
 REACT_APP_REDIRECT_URI=<redirect URI for authentication, e.g.: https://localhost:3000>
 REACT_APP_AUTO_SAVE=<whether to save automatically in browser storage when designing a form, e.g.: true>
 REACT_APP_CURRENT_LOCALE=<current user interface locale, e.g.: en>
+REACT_APP_SUPPORTED_LOCALES=<locales supported by the application, e.g.: en,ja,de,fr,es,nl,it,pt,pl,cs,da,fi,ko,nb,sv,tr>
 REACT_APP_GRID_COLUMN_COUNT=<amount of columns in the form design canvas, e.g.: 4>
 REACT_APP_FORM_COLUMN_COUNT=<amount of columns to use when generating controls on the form, e.g.: 2>
 REACT_APP_FORM_CHECKPOINT_COUNT=<when autosave is not turned on, the amount of check points or save slots you can manually save to before overwriting the oldest save>
-REACT_APP_REMOTE_LIST_SIZE=<how many forms to maximally fetch from the Forms API repository when populating the remote forms list>
+REACT_APP_DEFAULT_THEME_NAME=<the default theme name to use when designing a form, e.g.: JATOLight>
+REACT_APP_VALIDATE_MISSING_FIELDS=<whether to validate properties that are not on the form (i.e., missing), but are in the schema (data model definition) passed to the form>
+REACT_APP_MAXIMUM_MULTIPLE_FORMS=<maximum allowed number of form instances that can run at the same time>
 REACT_APP_ORGANIZATION_ID=<the organization id (availabie in Admin Center) for the developer organization; this is needed to populate the user control when running the form/UI>
 REACT_APP_APP_ID=<the app id (availabie in Admin Center under the organization view app management section) for the application; this is needed to populate the user control when running the form/UI>
 ```
@@ -30,7 +33,7 @@ Make sure you have a valid subscription to the Thrust Services developer plan (t
 
 Step 1: Sign in to developer.opentext.com and open the organization view for your developer organization.
 
-Step 2: Open the tenants view and click on the tenant you want to use for your application to navigate to the tenant overview section. Copy the **tenantId** value to the property **REACT_APP_TENANT_ID** in the .env file, e.g.:
+Step 2: Open the tenants view and click on the tenant you want to use for your application to navigate to the tenant overview section and select to see the tenant information. Copy the **Tenant Id** value to the property **REACT_APP_TENANT_ID** in the .env file, e.g.:
 ```
 REACT_APP_TENANT_ID=b9c156c5-3292-4bad-b5ca-cb245c4c3873
 ```
@@ -65,7 +68,7 @@ For more information on Forms API, please refer to the product documentation at 
 
 ### Prerequisite
 
-We provide an example of a schema generator, which is software or a library that allows generating a Forms API compatible JSON schema from another model/data definition. This schema generator shows how to generate a schema from a Core Content Workspace Type JSON (you can export such a Workspace Type JSON from Core Content). As a prerequisite for testing the schema generation from a Workspace Type Definition, the user should have their own Workspace Type Definition. Alternatively, they can also create their own Forms API JSON schema as explained [here](https://developer.opentext.com/services/products/forms-service/documentation/forms-javascript-api/3).
+As part of the Forms API product, we provide a schema generator library that allows generating a Forms API compatible JSON schema from another model/data definition. This schema generator allows generating a schema from a Core Content Workspace Type JSON (you can export such a Workspace Type JSON from Core Content). As a prerequisite for testing the schema generation from a Workspace Type Definition, the user should have their own Workspace Type Definition. Alternatively, they can also create their own Forms API JSON schema as explained [here](https://developer.opentext.com/services/products/forms-service/documentation/forms-javascript-api/3).
 
 ### Create a new form
 

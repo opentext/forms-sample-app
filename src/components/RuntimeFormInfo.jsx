@@ -1,6 +1,8 @@
 import './RuntimeFormInfo.css';
 
-import { forwardRef, useEffect } from 'react';
+import {
+  forwardRef, useEffect, useImperativeHandle, useRef,
+} from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import FormData from './FormData';
@@ -13,10 +15,18 @@ export const runtimeFormInfoTabs = {
   missingFields: 'missingFields',
 };
 
-const RuntimeFormInfo = forwardRef(({ activeTab, onTabSelect }, ref) => {
+const RuntimeFormInfo = forwardRef(({ activeTab, onTabSelect, runtimeElementId }, ref) => {
   useEffect(() => {
     onTabSelect(activeTab);
   }, [activeTab, onTabSelect]);
+
+  const formDataRef = useRef();
+  const validationErrorsRef = useRef();
+
+  useImperativeHandle(ref, () => ({
+    setInitialFormData: formDataRef.current.setInitialFormData,
+    validateFormData: validationErrorsRef.current.validateFormData,
+  }));
 
   return (
     <Tabs activeKey={activeTab} onSelect={(key) => onTabSelect(key)}>
@@ -25,14 +35,18 @@ const RuntimeFormInfo = forwardRef(({ activeTab, onTabSelect }, ref) => {
         title="Form Data"
         className="runtime-form-info-tab"
       >
-        <FormData />
+        <FormData
+          runtimeElementId={runtimeElementId}
+          ref={formDataRef}
+          validationErrorsRef={validationErrorsRef}
+        />
       </Tab>
       <Tab
         eventKey={runtimeFormInfoTabs.validationErrors}
         title="Validation Errors"
         className="runtime-form-info-tab"
       >
-        <ValidationErrors ref={ref} />
+        <ValidationErrors ref={validationErrorsRef} runtimeElementId={runtimeElementId} />
       </Tab>
       <Tab
         eventKey={runtimeFormInfoTabs.missingFields}
@@ -50,6 +64,7 @@ RuntimeFormInfo.displayName = 'RuntimeFormInfo';
 RuntimeFormInfo.propTypes = {
   activeTab: PropTypes.oneOf(Object.values(runtimeFormInfoTabs)).isRequired,
   onTabSelect: PropTypes.func.isRequired,
+  runtimeElementId: PropTypes.string,
 };
 
 export default RuntimeFormInfo;

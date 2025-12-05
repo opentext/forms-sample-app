@@ -2,18 +2,20 @@ import {
   forwardRef, useContext, useImperativeHandle, useState,
 } from 'react';
 import { Table } from 'react-bootstrap';
-import { FORM_RUNTIME_ELEMENT_ID } from './FormRuntime';
+import PropTypes from 'prop-types';
 import AppContext from '../store/context/app-context';
 
-function ValidationErrors(_, ref) {
+const ValidationErrors = forwardRef(({ runtimeElementId }, ref) => {
+// function ValidationErrors({ runtimeElementId }, ref) {
   const { formClient } = useContext(AppContext);
   const [problems, setProblems] = useState([]);
 
   useImperativeHandle(ref, () => ({
     validateFormData: async () => {
-      const formDataInfo = await formClient.getFormData({ htmlElementId: FORM_RUNTIME_ELEMENT_ID });
+      const formDataInfo = await formClient.getFormData({ htmlElementId: runtimeElementId, validateMissingFields: process.env.REACT_APP_VALIDATE_MISSING_FIELDS !== 'false' });
       setProblems(formDataInfo.problems);
     },
+    setProblems,
   }));
 
   return (
@@ -38,6 +40,12 @@ function ValidationErrors(_, ref) {
       </tbody>
     </Table>
   );
-}
+});
 
-export default forwardRef(ValidationErrors);
+ValidationErrors.displayName = 'ValidationErrors';
+
+ValidationErrors.propTypes = {
+  runtimeElementId: PropTypes.string,
+};
+
+export default ValidationErrors;

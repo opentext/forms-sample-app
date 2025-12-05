@@ -12,11 +12,7 @@ function MissingFields({ show = true }) {
 
   useEffect(() => {
     formClient.getMissingFields({ localReference: activeForm })
-      .then(({ missingFields }) => {
-        if (missingFields) {
-          setMissingFieldsForActiveForm(missingFields);
-        }
-      });
+      .then(({ missingFields }) => setMissingFieldsForActiveForm(missingFields));
   }, [activeForm, formClient]);
 
   return (

@@ -1,18 +1,26 @@
 import './Preview.css';
 
-import { useContext, useEffect, useState } from 'react';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import SplitPane, { Pane } from 'split-pane-react';
 import AppContext from '../store/context/app-context';
 
-const PREVIEW_ELEMENT_ID = 'preview';
+export const PREVIEW_ELEMENT_ID = 'preview';
 
 function Preview() {
   const {
     activeForm,
+    activeRuntime,
     formClient,
+    isFormDesignChanged,
+    setActiveRuntime,
+    setIsFormDesignChanged,
+    showNotification,
   } = useContext(AppContext);
   const [sizes, setSizes] = useState(['260px', 'auto', '260px']);
+  const formChanged = useRef(isFormDesignChanged);
 
   useEffect(() => {
     formClient.renderForm(
@@ -20,9 +28,22 @@ function Preview() {
         localReference: activeForm,
         htmlElementId: PREVIEW_ELEMENT_ID,
         useFormLocale: true,
+        formData: formChanged.current ? {} : undefined,
+        runtimeInstanceId: formChanged.current || !activeRuntime ? undefined : activeRuntime,
       },
-    );
-  }, [activeForm, formClient]);
+    ).then((runtimeInstanceId) => {
+      setActiveRuntime(runtimeInstanceId);
+    });
+    if (formChanged.current) {
+      setIsFormDesignChanged(false);
+      formChanged.current = false;
+    }
+  }, [activeForm,
+    activeRuntime,
+    formClient,
+    setActiveRuntime,
+    setIsFormDesignChanged,
+    showNotification]);
 
   return (
     <Container fluid>

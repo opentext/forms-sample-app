@@ -1,5 +1,6 @@
 .preview {
   border-top: var(--border-style);
+  height: calc(100vh - 236px);
 }
 
 .preview-left-pane {
@@ -22,4 +23,8 @@
 .split-pane-container {
   border-bottom: var(--border-style);
   height: calc(100vh - 235px);
+}
+
+.react-split__pane:nth-child(2) {
+  overflow: auto;
 }

@@ -1,0 +1,121 @@
+.acl-modal-tab {
+  border-bottom: var(--border-style);
+  border-left: var(--border-style);
+  border-right: var(--border-style);
+  min-height: calc(100vh - 275px);
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.acl-permit-item {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 15px;
+}
+
+.acl-permit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.acl-permission-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+  align-items: flex-start;
+}
+
+.permission-checkbox {
+  margin-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+  min-width: 140px;
+}
+
+.permission-checkbox .form-check-input {
+  margin-top: 0;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.permission-checkbox .form-check-label {
+  font-size: 0.9em;
+  text-transform: capitalize;
+  color: #495057;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.permission-checkbox .form-check-input:checked {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 576px) {
+  .acl-permission-checkboxes {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .permission-checkbox {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+/* Ensure proper spacing between permission sections */
+.permissions-section .acl-permission-checkboxes {
+  margin-top: 8px;
+}
+
+.acl-form-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.acl-form-section h6 {
+  margin-bottom: 15px;
+  color: #495057;
+  font-weight: 600;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 8px;
+}
+
+.identity-type-section {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.identity-guidance {
+  font-size: 0.875em;
+  color: #6c757d;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.permissions-section {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.permissions-section .form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 12px;
+}

@@ -1,6 +1,8 @@
 import './FormSpecsModal.css';
 
-import { useContext, useEffect, useState } from 'react';
+import {
+  useContext, useEffect, useState, useCallback,
+} from 'react';
 import {
   Button, Modal, Tab, Tabs,
 } from 'react-bootstrap';
@@ -16,7 +18,8 @@ const emptyMetadata = {
   displayName: '',
   name: '',
   description: '',
-  versionLabels: [],
+  versionLabels: '',
+  aclLocalReference: '',
 };
 
 const emptySchemaDefinition = {
@@ -48,6 +51,7 @@ function FormSpecsModal({
   } = useContext(AppContext);
   const [isCreate, setIsCreate] = useState(true);
   const [metadata, setMetadata] = useState(emptyMetadata);
+  const [localAcls, setLocalAcls] = useState([]);
   const [onCancelMetadata, setOnCancelMetadata] = useState();
   const [onCancelSchemaDefinition, setOnCancelSchemaDefinition] = useState();
   const [hasMetadataBeenModified, setHasMetadataBeenModified] = useState(false);
@@ -57,15 +61,20 @@ function FormSpecsModal({
   const [alreadyExists, setAlreadyExists] = useState(false);
   const [selectedTab, setSelectedTab] = useState();
 
+  const fetchLocalAcls = useCallback(async () => {
+    const aclList = await formClient.listLocalAcls({});
+    setLocalAcls(aclList);
+  }, [formClient]);
+
   const checkIfFormExists = async () => {
     try {
       const requestMetadata = {
         namespace: metadata.namespace,
         name: metadata.name,
       };
-      const data = await formClient.listRemoteForms(requestMetadata);
+      const list = await formClient.listRemoteForms(requestMetadata);
 
-      return data.length === 1;
+      return list.forms.length === 1;
     } catch (err) {
       if (err.message === "Cannot read properties of undefined (reading 'design')") {
         // Form exists, but you don't have access to it, so no notification required
@@ -114,12 +123,13 @@ function FormSpecsModal({
             displayName: metadata.displayName,
             name: metadata.name,
             description: metadata.description,
-            versionLabels: ['myVersion', 'myv001'],
+            versionLabels: metadata.versionLabels,
             schema: getStringifiedSchemaDefinition(),
             gridColumnCount:
               convertStringToNumber(process.env.REACT_APP_GRID_COLUMN_COUNT, 4),
             formColumnCount:
               convertStringToNumber(process.env.REACT_APP_FORM_COLUMN_COUNT, 1),
+            aclLocalReference: metadata.aclLocalReference || undefined,
           });
           onUnsaved(newFormLocalReference);
           setMetadata(emptyMetadata);
@@ -130,7 +140,9 @@ function FormSpecsModal({
             form: {
               displayName: metadata.displayName,
               description: metadata.description,
+              versionLabels: metadata.versionLabels,
               schema: getStringifiedSchemaDefinition(),
+              aclLocalReference: metadata.aclLocalReference,
             },
           });
           onUnsaved(activeForm);
@@ -164,7 +176,8 @@ function FormSpecsModal({
           displayName: data.displayName,
           name: data.name,
           description: data.description,
-          versionLabels: data.versionLabels,
+          versionLabels: data.versionLabels?.join(',') ?? '',
+          aclLocalReference: data.aclId || '',
         };
         setMetadata(formMetadata);
         setOnCancelMetadata({ ...formMetadata });
@@ -187,6 +200,13 @@ function FormSpecsModal({
     }
   }, [activeForm, formClient]);
 
+  // Fetch local ACLs when modal is shown
+  useEffect(() => {
+    if (show) {
+      fetchLocalAcls();
+    }
+  }, [show, fetchLocalAcls]);
+
   return (
     <Modal centered size="xl" show={show && !isSpinnerVisible} onHide={handleOnClickCancel}>
       <Modal.Header closeButton>
@@ -199,6 +219,7 @@ function FormSpecsModal({
               alreadyExists={alreadyExists}
               isCreate={isCreate}
               metadata={metadata}
+              localAcls={localAcls}
               onFormIdentifierChanged={() => {
                 if (alreadyExists) {
                   setAlreadyExists(false);

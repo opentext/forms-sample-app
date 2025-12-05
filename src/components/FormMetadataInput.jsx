@@ -5,13 +5,15 @@ import {
 import PropTypes from 'prop-types';
 
 function FormMetadataInput({
-  isCreate, alreadyExists, metadata, onMetadataModified, onFormIdentifierChanged,
+  isCreate, alreadyExists, metadata, localAcls, onMetadataModified, onFormIdentifierChanged,
 }) {
   const [metadataInputValues, setMetadataInputValues] = useState({
     namespace: '',
     displayName: '',
     name: '',
     description: '',
+    versionLabels: '',
+    aclLocalReference: '',
   });
   const [validated, setValidated] = useState(false);
 
@@ -44,6 +46,8 @@ function FormMetadataInput({
       displayName: metadataInputValues.displayName,
       name: metadataInputValues.name,
       description: metadataInputValues.description,
+      versionLabels: metadataInputValues.versionLabels,
+      aclLocalReference: metadataInputValues.aclLocalReference,
     };
 
     if (modifiedMetadata[name] === metadata[name]) {
@@ -158,6 +162,40 @@ function FormMetadataInput({
             />
           </Form.Group>
         </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label>Version labels</Form.Label>
+            <Form.Control
+              type="text"
+              name="versionLabels"
+              placeholder="Enter version label(s)"
+              value={metadataInputValues.versionLabels}
+              onBlur={handleValueEntered}
+              onChange={handleChange}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col}>
+            <Form.Label>Access Control List (ACL)</Form.Label>
+            <Form.Select
+              name="aclLocalReference"
+              value={metadataInputValues.aclLocalReference}
+              onBlur={handleValueEntered}
+              onChange={handleChange}
+            >
+              <option value="">None</option>
+              {localAcls.map((acl) => (
+                <option key={acl.localReference} value={acl.localReference}>
+                  {acl.metadata.name}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Text className="text-muted">
+              Select an ACL to control access permissions for this form
+            </Form.Text>
+          </Form.Group>
+        </Row>
       </Container>
     </Form>
   );
@@ -171,8 +209,17 @@ FormMetadataInput.propTypes = {
     displayName: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
-    versionLabels: PropTypes.arrayOf(PropTypes.string),
+    versionLabels: PropTypes.string,
+    aclLocalReference: PropTypes.string,
   }).isRequired,
+  localAcls: PropTypes.arrayOf(
+    PropTypes.shape({
+      localReference: PropTypes.string.isRequired,
+      metadata: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
+  ).isRequired,
   onFormIdentifierChanged: PropTypes.func.isRequired,
   onMetadataModified: PropTypes.func.isRequired,
 };
