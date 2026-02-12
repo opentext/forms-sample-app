@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
-  createRef, useEffect, useRef, useState,
+  createRef, useContext, useEffect, useRef, useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,6 +9,7 @@ import {
   Col, Container, Row,
 } from 'react-bootstrap';
 import { v4 as uuidV4 } from 'uuid';
+import AppContext from '../store/context/app-context';
 import Toolbar from '../components/Toolbar';
 import ThemeSelect from '../components/ThemeSelect';
 import RuntimeFormInfo, { runtimeFormInfoTabs } from '../components/RuntimeFormInfo';
@@ -17,6 +18,13 @@ import FormActionDispatcher from '../components/FormActionDispatcher';
 import LocaleSelect from '../components/LocaleSelect';
 
 function FormRuntimePage() {
+  const {
+    formClient,
+    activeDesignerElementId,
+    setActiveDesignerElementId,
+    activePreviewRuntimeElementId,
+    setActivePreviewRuntimeElementId,
+  } = useContext(AppContext);
   const [runtimeActiveAccordionKey, setRuntimeActiveAccordionKey] = useState(0);
   const navigate = useNavigate();
 
@@ -57,6 +65,32 @@ function FormRuntimePage() {
       setRuntimeActiveAccordionKey(formsCount);
     }
   }, [formsCount, formsInfo.length]);
+
+  // Dispose designer when navigating to runtime page from design page
+  useEffect(() => {
+    if (activeDesignerElementId) {
+      try {
+        formClient.disposeDesigner({ htmlElementId: activeDesignerElementId });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error disposing designer ${activeDesignerElementId}:`, error);
+      }
+      setActiveDesignerElementId('');
+    }
+  }, [formClient, activeDesignerElementId, setActiveDesignerElementId]);
+
+  // Dispose preview runtime when navigating to runtime page
+  useEffect(() => {
+    if (activePreviewRuntimeElementId) {
+      try {
+        formClient.disposeRuntime({ htmlElementId: activePreviewRuntimeElementId });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error disposing preview runtime ${activePreviewRuntimeElementId}:`, error);
+      }
+      setActivePreviewRuntimeElementId('');
+    }
+  }, [formClient, activePreviewRuntimeElementId, setActivePreviewRuntimeElementId]);
 
   return (
     <>

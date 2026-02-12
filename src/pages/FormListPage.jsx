@@ -30,6 +30,12 @@ function FormSpecsPage() {
     setRefreshRemoteList,
     showNotification,
     showSpinner,
+    activeDesignerElementId,
+    setActiveDesignerElementId,
+    activePreviewRuntimeElementId,
+    setActivePreviewRuntimeElementId,
+    activeRuntimeElementIds,
+    setActiveRuntimeElementIds,
   } = useContext(AppContext);
   const navigate = useNavigate();
   const [remoteForm, setRemoteForm] = useState();
@@ -230,6 +236,49 @@ function FormSpecsPage() {
       isMounted.current = true;
     }
   }, [formClient, refreshLocalFormsList, refreshRemoteFormsList]);
+
+  // Dispose designer when navigating to list page from design page
+  useEffect(() => {
+    if (activeDesignerElementId) {
+      try {
+        formClient.disposeDesigner({ htmlElementId: activeDesignerElementId });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error disposing designer ${activeDesignerElementId}:`, error);
+      }
+      setActiveDesignerElementId('');
+    }
+  }, [formClient, activeDesignerElementId, setActiveDesignerElementId]);
+
+  // Dispose preview runtime when navigating to list page
+  useEffect(() => {
+    if (activePreviewRuntimeElementId) {
+      try {
+        formClient.disposeRuntime({ htmlElementId: activePreviewRuntimeElementId });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error disposing preview runtime ${activePreviewRuntimeElementId}:`, error);
+      }
+      setActivePreviewRuntimeElementId('');
+    }
+  }, [formClient, activePreviewRuntimeElementId, setActivePreviewRuntimeElementId]);
+
+  // Dispose runtime instances when navigating to list page from runtime page
+  useEffect(() => {
+    if (activeRuntimeElementIds.length > 0) {
+      activeRuntimeElementIds.forEach((elementId) => {
+        if (elementId) {
+          try {
+            formClient.disposeRuntime({ htmlElementId: elementId });
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(`Error disposing runtime ${elementId}:`, error);
+          }
+        }
+      });
+      setActiveRuntimeElementIds([]);
+    }
+  }, [formClient, activeRuntimeElementIds, setActiveRuntimeElementIds]);
 
   return (
     <div hidden={isSpinnerVisible}>

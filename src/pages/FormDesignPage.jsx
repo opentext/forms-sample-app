@@ -38,6 +38,10 @@ function FormDesignPage() {
     setIsFormDesignChanged,
     setChangesFlagForActiveForm,
     setRefreshCheckpointList,
+    activePreviewRuntimeElementId,
+    setActivePreviewRuntimeElementId,
+    activeRuntimeElementIds,
+    setActiveRuntimeElementIds,
   } = useContext(AppContext);
   const navigate = useNavigate();
   const [formStatus, setFormStatus] = useState('');
@@ -113,6 +117,36 @@ function FormDesignPage() {
   useEffect(() => {
     setIsAutoSave(formClient.getConfig().designConfig?.autoSave);
   }, [formClient]);
+
+  // Dispose preview runtime when switching away from preview tab
+  useEffect(() => {
+    if (activeTab !== tabs.preview && activePreviewRuntimeElementId) {
+      try {
+        formClient.disposeRuntime({ htmlElementId: activePreviewRuntimeElementId });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Error disposing preview runtime ${activePreviewRuntimeElementId}:`, error);
+      }
+      setActivePreviewRuntimeElementId('');
+    }
+  }, [activeTab, activePreviewRuntimeElementId, formClient, setActivePreviewRuntimeElementId]);
+
+  // Dispose runtime instances when navigating to design page from runtime page
+  useEffect(() => {
+    if (activeRuntimeElementIds.length > 0) {
+      activeRuntimeElementIds.forEach((elementId) => {
+        if (elementId) {
+          try {
+            formClient.disposeRuntime({ htmlElementId: elementId });
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(`Error disposing runtime ${elementId}:`, error);
+          }
+        }
+      });
+      setActiveRuntimeElementIds([]);
+    }
+  }, [formClient, activeRuntimeElementIds, setActiveRuntimeElementIds]);
 
   useEffect(() => {
     if (isUnsaved(activeForm) !== canSave) {

@@ -11,6 +11,8 @@ function FormRuntime({
     activeForm,
     formClient,
     showNotification,
+    addRuntimeElementId,
+    removeRuntimeElementId,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -20,6 +22,8 @@ function FormRuntime({
     as there is only one active runtime form.
     However, you could decide to launch multiple forms at once passing different
     htmlElementId values to differeent renderForm calls. */
+    addRuntimeElementId(runtimeElementId);
+
     async function renderForm() {
       await formClient.renderForm(
         {
@@ -40,11 +44,25 @@ function FormRuntime({
       });
     }
     renderForm();
+
+    return () => {
+      if (runtimeElementId) {
+        try {
+          formClient.disposeRuntime({ htmlElementId: runtimeElementId });
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(`Error disposing runtime ${runtimeElementId}:`, error);
+        }
+        removeRuntimeElementId(runtimeElementId);
+      }
+    };
   }, [activeForm,
     formClient,
     runtimeFormInfoRef,
     showNotification,
-    runtimeElementId]);
+    runtimeElementId,
+    addRuntimeElementId,
+    removeRuntimeElementId]);
 
   return (
     <div id={runtimeElementId} className="form-runtime" />

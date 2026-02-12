@@ -89,6 +89,24 @@ function FormSpecsModal({
     schemaDefinition ? JSON.stringify(schemaDefinition) : JSON.stringify(emptySchemaDefinition)
   );
 
+  const getLocalizations = (localizations) => {
+    const newLocalizations = {};
+    Object.keys(localizations).forEach((locale) => {
+      const localization = localizations[locale];
+      const newLocalization = {};
+      if (localization.schema) {
+        newLocalization.schema = localization.schema;
+      }
+      if (localization.additionalSchemas) {
+        newLocalization.additionalSchemas = localization.additionalSchemas;
+      }
+      if (Object.keys(newLocalization).length > 0) {
+        newLocalizations[locale] = newLocalization;
+      }
+    });
+    return newLocalizations;
+  };
+
   const handleMetadataModified = (modifiedMetadata) => {
     setMetadata(modifiedMetadata);
     setHasMetadataBeenModified(true);
@@ -170,14 +188,15 @@ function FormSpecsModal({
 
   useEffect(() => {
     if (activeForm && activeForm !== 'undefined') {
-      formClient.getForm({ localReference: activeForm }).then(({ data }) => {
+      formClient.getForm({ localReference: activeForm }).then((formInformation) => {
+        const data = JSON.parse(JSON.stringify(formInformation.data));
         const formMetadata = {
           namespace: data.namespace,
           displayName: data.displayName,
           name: data.name,
           description: data.description,
           versionLabels: data.versionLabels?.join(',') ?? '',
-          aclLocalReference: data.aclId || '',
+          aclLocalReference: data.aclId ?? '',
         };
         setMetadata(formMetadata);
         setOnCancelMetadata({ ...formMetadata });
@@ -185,8 +204,13 @@ function FormSpecsModal({
         const formSchema = {
           defaultLocale: data.defaultLocale,
           schema: content.schema,
-          localizations: content.localizations,
         };
+        if (Array.isArray(content.additionalSchemas)) {
+          formSchema.additionalSchemas = content.additionalSchemas;
+        }
+        if (typeof content.localizations === 'object') {
+          formSchema.localizations = getLocalizations(content.localizations);
+        }
         setSchemaDefinition(formSchema);
         setOnCancelSchemaDefinition({ ...formSchema });
         setIsCreate(false);

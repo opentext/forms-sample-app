@@ -35,7 +35,6 @@ function DesignerConfigPicker({ disabled = false }) {
           <option value={DesignerConfigNames.earlyAccess}>Early access</option>
           <option value={DesignerConfigNames.simpleNoModel}>Simple - no model</option>
           <option value={DesignerConfigNames.simpleOnlyModel}>Simple - only model</option>
-          <option value={DesignerConfigNames.standard}>Standard</option>
         </Form.Select>
       </InputGroup>
     </Form>

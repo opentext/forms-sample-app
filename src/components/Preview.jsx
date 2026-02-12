@@ -18,11 +18,21 @@ function Preview() {
     setActiveRuntime,
     setIsFormDesignChanged,
     showNotification,
+    setActivePreviewRuntimeElementId,
   } = useContext(AppContext);
   const [sizes, setSizes] = useState(['260px', 'auto', '260px']);
   const formChanged = useRef(isFormDesignChanged);
 
   useEffect(() => {
+    // Clear runtime callbacks to prevent interference with preview
+    formClient.updateConfig({
+      runtimeConfig: {
+        afterFormDataChangeCallback: null,
+      },
+    });
+
+    setActivePreviewRuntimeElementId(PREVIEW_ELEMENT_ID);
+
     formClient.renderForm(
       {
         localReference: activeForm,
@@ -38,12 +48,17 @@ function Preview() {
       setIsFormDesignChanged(false);
       formChanged.current = false;
     }
+
+    return () => {
+      setActivePreviewRuntimeElementId('');
+    };
   }, [activeForm,
     activeRuntime,
     formClient,
     setActiveRuntime,
     setIsFormDesignChanged,
-    showNotification]);
+    showNotification,
+    setActivePreviewRuntimeElementId]);
 
   return (
     <Container fluid>

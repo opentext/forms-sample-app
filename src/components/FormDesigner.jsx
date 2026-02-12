@@ -9,14 +9,16 @@ function FormDesigner() {
   const {
     activeForm,
     formClient,
+    setActiveDesignerElementId,
   } = useContext(AppContext);
 
   useEffect(() => {
+    setActiveDesignerElementId(FORM_DESIGNER_ELEMENT_ID);
     formClient.editForm({
       localReference: activeForm,
       htmlElementId: FORM_DESIGNER_ELEMENT_ID,
     });
-  }, [activeForm, formClient]);
+  }, [activeForm, formClient, setActiveDesignerElementId]);
 
   return (
     <div id={FORM_DESIGNER_ELEMENT_ID} className="form-designer" />

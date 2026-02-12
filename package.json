@@ -3,7 +3,7 @@
   "displayName": "Forms Sample App",
   "description": "Sample application for the OpenText Forms API.",
   "private": true,
-  "version": "25.4.1",
+  "version": "26.1.2",
   "type": "module",
   "publisher": "OpenText",
   "license": "Apache-2.0",
@@ -31,8 +31,8 @@
     ]
   },
   "dependencies": {
-    "@opentext/forms-client": "25.4.1",
-    "@opentext/forms-schema-generator": "25.4.1",
+    "@opentext/forms-client": "26.1.1",
+    "@opentext/forms-schema-generator": "26.1.1",
     "@vitejs/plugin-basic-ssl": "1.2.0",
     "@vitejs/plugin-react": "4.3.4",
     "bootstrap": "5.3.3",

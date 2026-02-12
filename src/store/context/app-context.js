@@ -14,6 +14,9 @@ const AppContext = createContext({
   spinnerMessage: '',
   isFormDesignChanged: false,
   currentLocale: '',
+  activeDesignerElementId: '',
+  activePreviewRuntimeElementId: '',
+  activeRuntimeElementIds: [],
   hideSpinner: () => {},
   isUnsaved: () => {},
   setActiveForm: () => {},
@@ -31,6 +34,11 @@ const AppContext = createContext({
   showSpinner: () => {},
   setIsFormDesignChanged: () => {},
   setCurrentLocale: () => {},
+  setActiveDesignerElementId: () => {},
+  setActivePreviewRuntimeElementId: () => {},
+  setActiveRuntimeElementIds: () => {},
+  addRuntimeElementId: () => {},
+  removeRuntimeElementId: () => {},
 });
 
 export default AppContext;

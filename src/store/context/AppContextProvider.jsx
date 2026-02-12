@@ -31,6 +31,9 @@ function AppContextProvider({ children }) {
   const [refreshCheckpointList, setRefreshCheckpointList] = useState(0);
   const [isFormDesignChanged, setIsFormDesignChanged] = useState(false);
   const [currentLocale, setCurrentLocale] = useState(process.env.REACT_APP_CURRENT_LOCALE);
+  const [activeDesignerElementId, setActiveDesignerElementId] = useState('');
+  const [activePreviewRuntimeElementId, setActivePreviewRuntimeElementId] = useState('');
+  const [activeRuntimeElementIds, setActiveRuntimeElementIds] = useState([]);
 
   const hideSpinner = () => {
     setIsSpinnerVisible(false);
@@ -72,6 +75,17 @@ function AppContextProvider({ children }) {
         .then((value) => setUnsavedChangesFlag(value));
     }
   }, [activeForm, formClient]);
+
+  const addRuntimeElementId = useCallback((id) => {
+    setActiveRuntimeElementIds((prev) => {
+      if (prev.includes(id)) return prev;
+      return [...prev, id];
+    });
+  }, []);
+
+  const removeRuntimeElementId = useCallback((id) => {
+    setActiveRuntimeElementIds((prev) => prev.filter((elementId) => elementId !== id));
+  }, []);
 
   /* Store context elements that should persist across screens in session storage
   to ensure they don't get lost as long as the browser session is active */
@@ -134,6 +148,9 @@ function AppContextProvider({ children }) {
       spinnerMessage,
       isFormDesignChanged,
       currentLocale,
+      activeDesignerElementId,
+      activePreviewRuntimeElementId,
+      activeRuntimeElementIds,
       hideSpinner,
       isUnsaved,
       setActiveForm,
@@ -152,6 +169,11 @@ function AppContextProvider({ children }) {
       showSpinner,
       setIsFormDesignChanged,
       setCurrentLocale,
+      setActiveDesignerElementId,
+      setActivePreviewRuntimeElementId,
+      setActiveRuntimeElementIds,
+      addRuntimeElementId,
+      removeRuntimeElementId,
     }
   ), [
     activeForm,
@@ -168,9 +190,14 @@ function AppContextProvider({ children }) {
     spinnerMessage,
     isFormDesignChanged,
     currentLocale,
+    activeDesignerElementId,
+    activePreviewRuntimeElementId,
+    activeRuntimeElementIds,
     isUnsaved,
     showNotification,
     setChangesFlagForActiveForm,
+    addRuntimeElementId,
+    removeRuntimeElementId,
   ]);
 
   return (
